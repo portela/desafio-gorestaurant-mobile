@@ -23,7 +23,7 @@ interface Food {
   name: string;
   description: string;
   price: number;
-  formattedValue: number;
+  formattedValue: number; // formattedPrice: string ?
   thumbnail_url: string;
 }
 
@@ -32,7 +32,12 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
-      // Load orders from API
+      const response = await api.get('orders');
+      const updatedOrders: Food[] = response.data.map(o => ({
+        ...o,
+        formattedPrice: formatValue(o.price),
+      }));
+      setOrders(updatedOrders);
     }
 
     loadOrders();
